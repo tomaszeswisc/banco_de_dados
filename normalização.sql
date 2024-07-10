@@ -47,6 +47,9 @@ INSERT INTO produtos (nome_produto, fornecedor, telefone_fornecedor) VALUES
 ('TV', 'LG', '12345678'),
 ('Geladeira', 'Samsung', '87654321');
 
+
+
+
 -- Normalizando o Banco de dados 1FN
 
 CREATE TABLE clientes_1FN (
@@ -73,6 +76,10 @@ INSERT INTO compras (cliente_id, item) VALUES
 
 -- Excluir a tabela não Normalizada
 DROP TABLE clientes;
+
+-- Separar dados atômicos em tabelas diferentes e inserir dados.
+-- Excluir tabela original.
+
 
 
 -- Normalizando o Banco de dados 2FN
@@ -102,3 +109,42 @@ SELECT cliente_id, data_pedido, valor FROM pedidos;
 -- Inserir dados na nova estrutura
 
 DROP TABLE pedidos;
+
+-- Eliminar dependências parciais ao criar tabelas separadas para dados redundantes e inserir dados.
+-- Excluir tabela original.
+
+
+-- Normalizando o Banco de dados 3FN
+
+CREATE TABLE fornecedores (
+    fornecedor_id INT AUTO_INCREMENT PRIMARY KEY,
+    nome_fornecedor VARCHAR(100),
+    telefone VARCHAR(15)
+);
+
+
+CREATE TABLE produtos_3FN (
+    produto_id INT AUTO_INCREMENT PRIMARY KEY,
+    nome_produto VARCHAR(100),
+    fornecedor_id INT,
+    FOREIGN KEY (fornecedor_id) REFERENCES fornecedores(fornecedor_id)
+);
+
+-- Inserir dados na nova estrutura
+
+INSERT INTO fornecedores (nome_fornecedor, telefone)
+SELECT fornecedor, telefone_fornecedor FROM produtos GROUP BY fornecedor, telefone_fornecedor;
+
+
+-- INSERT INTO produtos_3FN (nome_produto, fornecedor_id) 
+
+-- usando JOIN
+
+
+
+-- Excluir tabela antiga
+DROP TABLE produtos;
+
+
+-- Eliminar dependências transitivas ao criar tabelas separadas para dados relacionados e inserir dados.
+-- Excluir tabela original.
